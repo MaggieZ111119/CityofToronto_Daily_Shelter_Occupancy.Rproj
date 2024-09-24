@@ -1,0 +1,80 @@
+---
+title: "Marriage Data analysis"
+subtitle: "STA304 WEEK 3"
+author: 
+  - Maggie Zhang
+thanks: "Code and data are available at:https://github.com/MaggieZ111119/marriage.git"
+date: today
+date-format: long
+abstract: "This is an analysis study on marriage data set in from Toronto. The goal is to examine the impact of marriage on influencing the social and financial status of individuals. The result carrying out supporting roles for sustainability improvements, financial support, public policy forming, etc."
+format: pdf
+number-sections: true
+bibliography: references.bib
+---
+
+```{r}
+#| include: false
+#| warning: false
+#| message: false
+
+library(tidyverse)
+library(ggplot2)
+
+# Read Data(Quarto need dataset to be readed in the file)
+data <- read_csv(here::here("data/analysis_data/cleaned_data.csv"))
+```
+
+
+# Introduction
+
+The Data are extracted from @OpenDataToronto, learn and used @citeR and @rohan. 
+
+
+
+# Data {#sec-data}
+
+
+
+
+# Results
+This histogram (@fig-marriagedata) reflects the amount new marriage happens each year from the year of 2011 to 2024 according to @OpenDataToronto.
+
+```{r}
+#| label: fig-marriagedata
+#| fig-cap: Marriage
+#| echo: false
+
+ggplot(data = data, 
+       aes(x = year, y = marriage_licenses)) +
+  geom_bar(stat = "identity") + labs(title = "Amount New Marriage Each Year 2011 - 2024", x = "Year", y = "Marriage Number")
+```
+
+
+# Discussion
+
+## First discussion point {#sec-first-point}
+
+from the study, the Marriage number across Toronto is .....
+
+## Second discussion point
+
+[My second point]
+
+## Third discussion point
+[My third point]
+
+## Weaknesses and next steps
+
+The study is not finalized, more detailed and careful data examination is needed.
+
+
+\newpage
+
+\appendix
+
+# Appendix {-}
+
+
+# References
+
+
