@@ -85,4 +85,4 @@ head(full_shelter_data)
 tail(full_shelter_data)
 
 #### Save data ####
-write_csv(cleaned_data, "starter_folder-main/data/analysis_data/cleaned_data.csv")
+write_csv(full_shelter_data, "data/analysis_data/full_shelter_data.csv")
