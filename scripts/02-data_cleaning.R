@@ -25,6 +25,7 @@ raw_2020_shelter <- data.frame(read_csv(
 ## Fix issue with data in four dataset, and select columns within our interest.
 #2017 Data
 cleaned_2017 <- raw_2017_shelter %>%
+  mutate(date = as.Date(raw_2017_shelter$OCCUPANCY_DATE, format = "%Y-%m-%d")) %>%
   group_by(OCCUPANCY_DATE,SHELTER_CITY,SECTOR) %>% 
   summarize(
     Totoal_Occupancy = sum(OCCUPANCY, na.rm = TRUE),
@@ -32,9 +33,13 @@ cleaned_2017 <- raw_2017_shelter %>%
     .groups = 'drop') %>%
   select(OCCUPANCY_DATE, SHELTER_CITY, SECTOR, 
          Totoal_Occupancy, Totoal_Capacity)
+cleaned_2017$OCCUPANCY_DATE <-  as.Date(cleaned_2017$OCCUPANCY_DATE, 
+                                        as.is = double, na.rm = TRUE)
+
 
 #2018 Data
 cleaned_2018 <- raw_2018_shelter %>%
+  mutate(date = as.Date(raw_2018_shelter$OCCUPANCY_DATE, format = "%Y-%m-%d")) %>%
   group_by(OCCUPANCY_DATE,SHELTER_CITY,SECTOR) %>% 
   summarize(
     Totoal_Occupancy = sum(OCCUPANCY, na.rm = TRUE),
@@ -42,9 +47,12 @@ cleaned_2018 <- raw_2018_shelter %>%
     .groups = 'drop') %>%
   select(OCCUPANCY_DATE, SHELTER_CITY, SECTOR, 
          Totoal_Occupancy, Totoal_Capacity)
+cleaned_2018$OCCUPANCY_DATE <-  as.Date(cleaned_2018$OCCUPANCY_DATE, 
+                                        as.is = double, na.rm = TRUE)
 
 #2019 Data
 cleaned_2019 <- raw_2019_shelter %>%
+  mutate(date = as.Date(raw_2019_shelter$OCCUPANCY_DATE, format = "%Y-%m-%d")) %>%
   group_by(OCCUPANCY_DATE,SHELTER_CITY,SECTOR) %>% 
   summarize(
     Totoal_Occupancy = sum(OCCUPANCY, na.rm = TRUE),
@@ -52,6 +60,8 @@ cleaned_2019 <- raw_2019_shelter %>%
     .groups = 'drop') %>%
   select(OCCUPANCY_DATE, SHELTER_CITY, SECTOR, 
          Totoal_Occupancy, Totoal_Capacity)
+cleaned_2019$OCCUPANCY_DATE <-  as.Date(cleaned_2019$OCCUPANCY_DATE, 
+                                        as.is = double, na.rm = TRUE)
 
 #2020 Data
 cleaned_2020 <- raw_2020_shelter %>%
@@ -63,16 +73,16 @@ cleaned_2020 <- raw_2020_shelter %>%
   select(OCCUPANCY_DATE, SHELTER_CITY, SECTOR, 
          Totoal_Occupancy, Totoal_Capacity)
 
+cleaned_2020$OCCUPANCY_DATE <- format(as.Date(cleaned_2020$OCCUPANCY_DATE, format = "%m/%d/%Y"), "%Y-%m-%d")
+
+
 ## Combine 4 dataset in order
-full_shelter_data <- rbind(raw_2017_shelter, raw_2018_shelter,
-                  raw_2019_shelter, raw_2020_shelter)
+full_shelter_data <- rbind(cleaned_2017, cleaned_2018,
+                           cleaned_2019, cleaned_2020)
 
 
-cleaned_data <-
-  raw_marriage_data |>
-  janitor::clean_names() |>
-  separate(col = time_period, into = c("year", "month"), sep = "-") |>
-  mutate(date = lubridate::ymd(paste(year, month, "01", sep = "-")))
+head(full_shelter_data)
+tail(full_shelter_data)
 
 #### Save data ####
 write_csv(cleaned_data, "starter_folder-main/data/analysis_data/cleaned_data.csv")
