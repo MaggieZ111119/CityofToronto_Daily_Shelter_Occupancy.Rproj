@@ -7,7 +7,6 @@
 # Pre-requisites: First sketch the idea of 
 # Any other information needed? Not much
 
-set.seed(1009633096)
 
 #### Workspace setup ####
 library(tidyverse)
@@ -18,45 +17,92 @@ library(tidyverse)
 #### Simulate data ####
 
 ## Date of data collection
-#Since the date in the data are collected each day at 4:00 am.
+set.seed(1009633096)
 start_data <- as.Date("2017-01-01")
 end_date <- as.Date("2020-12-31")
-Date_seq = seq(from = start_data, to = end_date, by = "day")
-Date <- rep(Date_seq, each = 4)
+Date_seq = seq(from = start_data, to = end_date, by = "day") %>% as.character()
 
 
 ## The City of shelter
-# Randomly pick a city to locate the shelter from all cities that has shelters suggested by the dataset from 2017 to 2020.
-appeared_city = unique(c(unique(raw_2017_shelter$SHELTER_CITY), 
+appeared_city <-  unique(c(unique(raw_2017_shelter$SHELTER_CITY), 
               unique(raw_2018_shelter$SHELTER_CITY),
               unique(raw_2019_shelter$SHELTER_CITY),
               unique(raw_2020_shelter$SHELTER_CITY)
               ))
-City = sample(appeared_city, size = length(Date), replace = TRUE)
 
-## The Province of shelter
-# Randomly pick a city to locate the shelter from all provinces that has shelters suggested by the dataset from 2017 to 2020.
-appeared_province = unique(c(unique(raw_2017_shelter$SHELTER_PROVINCE), 
-                         unique(raw_2018_shelter$SHELTER_PROVINCE),
-                         unique(raw_2019_shelter$SHELTER_PROVINCE),
-                         unique(raw_2020_shelter$SHELTER_PROVINCE)
-                         ))
-Province = sample(appeared_province, size = length(Date), replace = TRUE)
+
+# All involved sector categories:
+sectors <- c("women", "men", "youth", "co-ed", "family")
 
 
 
-## The amount each sector occupying the shelter, group by Cities
-# Randomly pick a type of Sector who is using the shelter from all Sectors exist within our focus suggested by the dataset from 2017 to 2020.
-appeared_sectors = unique(c(unique(raw_2017_shelter$SECTOR), 
-                             unique(raw_2018_shelter$SECTOR),
-                             unique(raw_2019_shelter$SECTOR),
-                             unique(raw_2020_shelter$SECTOR)
-))
-Sectors = sample(appeared_sectors, size = length(Date), replace = TRUE)
+## The amount of total Occupancy, 
+
+
+# Create an empty data frame for the simulated data
+simulated_dataset <- data.frame(
+  DATE = as.Date(character()),
+  SHELTER_CITY = character(),
+  SECTOR = character(),
+  TOTAL_OCCUPANCY = numeric(),
+  TOTAL_CAPACITY = numeric(),
+  stringsAsFactors = FALSE
+)
+
+
+# Simulate data for each day
+set.seed(1009633096)
+
+for (date in Date_seq) {
+  for (city in appeared_city) {
+    for (sector in sectors) {
+      # Simulate total occupancy and total capacity
+      total_occupancy <- rnorm(1, mean = 1600, sd = 500)  # Mean is approx. mid-range of 0 to 3279
+      total_capacity <- rnorm(1, mean = 1800, sd = 500)  # Mean is approx. mid-range of 0 to 3619
+      
+      # Ensure non-negative values
+      total_occupancy <- max(0, round(total_occupancy))
+      total_capacity <- max(0, round(total_capacity))
+      
+      # Add a new row to the data frame
+      simulated_dataset <- rbind(simulated_dataset, data.frame(
+        DATE = date,
+        SHELTER_CITY = city,
+        SECTOR = sector,
+        TOTAL_OCCUPANCY = total_occupancy,
+        TOTAL_CAPACITY = total_capacity,
+        stringsAsFactors = FALSE
+      ))
+    }
+  }
+}
+
+# View the first few rows of the simulated dataset
+# head(simulated_dataset)
+
+
+## TEST1: Missing Value
+num_missing_values <- sum(is.na(simulated_dataset))
+cat("Total missing values: ", num_missing_values, "\n")
+
+
+## TEST2: Negative value (Total_Occupancy and Total_Capacity)
+negative_occupancy <- sum(simulated_dataset$Total_Occupancy < 0)
+negative_capacity <- sum(simulated_dataset$Total_Capacity < 0)
+cat("Total negative occupancy values: ", negative_occupancy, "\n")
+cat("Total negative capacity values: ", negative_capacity, "\n")
+
+
+## TEST3: Date Format is consistent
+incorrect_dates <- sum(!grepl("^\\d{4}-\\d{2}-\\d{2}$", simulated_dataset$OCCUPANCY_DATE))
+
+if (incorrect_dates > 0) {
+  message("Warning: ", incorrect_dates, " dates are not in the correct format (YYYY-MM-DD).")
+} else {
+  message("All dates are in the correct format (YYYY-MM-DD).")
+}
 
 
 
-
-
-
-write_csv(data, file = "starter_folder-main/data/raw_data/simulated.csv")
+# Write and store the simulated dataset
+write_csv(simulated_dataset, file = "data/raw_data/simulated_dataset_shelter_data.csv")
