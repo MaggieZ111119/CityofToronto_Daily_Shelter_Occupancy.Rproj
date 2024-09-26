@@ -27,19 +27,19 @@ library(knitr)
 
 
 # Read Data(Quarto need data set to be readed in the file)
-shelter_data <- read_csv(here::here("~/CityofToronto_Daily_Shelter_Occupancy.Rproj/data/analysis_data/full_shelter_data.csv"))
+shelter_data <- read_csv(here::here("~/CityofToronto_Daily_Shelter_Occupancy.Rproj/data/analysis_data/full_shelter_data.csv"), show_col_types = FALSE)
 ```
 
 
 # Introduction
 
-Homelessness is a persistent and complex issue in many urban areas, and Toronto is no exception. As one of Canada’s largest cities, Toronto faces significant challenges in providing adequate shelter for its homeless population.The city operates a range of shelters that serve various groups, including men, women, youth, and families. The balance between availability and the demand for these services is crucial for both the well-being of individuals experiencing homelessness and the government's efforts to reduce homelessness population. Understanding how shelter occupancy changes over time, especially during critical periods, is essential for identifying gaps in resources and shaping effective policy responses.
+Homelessness is a persistent and complex issue in many areas in Canada(@gaetz2010struggle), and Toronto is no exception. As one of Canada’s largest cities, Toronto faces significant challenges in helping homeless people, who are unable to spend on housing largely due to poverty, to meet the necessities of living(@jadidzadeh2018patterns). The city operates a range of shelters that serve various groups, including men, women, youth, and families. The balance between availability and the demand for these services is crucial for both the well-being of individuals experiencing homelessness and the government's efforts to reduce homelessness population. Understanding how shelter occupancy changes over time is essential for identifying gaps in resources and shaping effective policy responses.
 
 This paper focuses on analyzing shelter occupancy data from 2017 to 2020 in City of Toronto. The data which offers a detailed look at the city’s shelter during this time of period is provided on @OpenDataToronto portal. By examining trends in occupancy through the data, we aim to assess how well Toronto's shelters met the demand for space and where shortages may have occurred. By focusing on specific sectors of the shelter system, pinpoint which groups may have been disproportionately affected by resource limitations. 
 
 FINDING! This study addresses a clear gap in the current literature by providing an up-to-date analysis of Toronto's shelter capacity and usage during a time of unprecedented public health and social challenges. ___ NOTICE!!
 
-The remiander of this paper are in presented in sections: @sec-data Data, @sec-results Results, and @sec-discussion Discussion. The data section introduce the dataset used for analysis, expalinin its source and context that shaped its collection.This section thoroughly summarizes the data using visualizations created with ggplot2 (@R-ggplot2) and tables produced with knitr (@R-knitr). Key variables chosen for the analysis, along with the reasoning behind their selection, are explained. The results section presents the findings drawn from the data, highlighting patterns in shelter occupancy and compare to it's availability. Following by the discussion section, which explores the implications of these findings, particularly in relation to resource allocation and policy development, offering insights into how Toronto's shelter system responded to increasing demand.
+The remiander of this paper are in presented in sections: @sec-data : Data, @sec-results :Results, and @sec-discussion :Discussion. The data section introduce the dataset used for analysis, expalinin its source and context that shaped its collection.This section thoroughly summarizes the data using visualizations created with ggplot2 (@R-ggplot2) and tables produced with knitr (@R-knitr). Key variables chosen for the analysis, along with the reasoning behind their selection, are explained. The results section presents the findings drawn from the data, highlighting patterns in shelter occupancy and compare to it's availability. Following by the discussion section, which explores the implications of these findings, particularly in relation to resource allocation and policy development, offering insights into how Toronto's shelter system responded to increasing demand.
 
 
 # Data {#sec-data}
@@ -48,14 +48,9 @@ City that has record of offering shleter servise incluede: Toronto, North York, 
 
 
 # Results {#sec-results}
-This histogram (@fig-marriagedata) reflects the amount new marriage happens each year from the year of 2011 to 2024 according to @OpenDataToronto.
+This histogram reflects the amount new marriage happens each year from the year of 2011 to 2024 according to @OpenDataToronto.
 
-```{r}
-#| label: fig-marriagedata
-#| fig-cap: Marriage
-#| echo: false
 
-```
 
 
 # Discussion {#sec-discussion}
