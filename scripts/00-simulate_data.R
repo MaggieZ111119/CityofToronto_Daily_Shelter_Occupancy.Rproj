@@ -20,7 +20,7 @@ library(tidyverse)
 set.seed(1009633096)
 start_data <- as.Date("2017-01-01")
 end_date <- as.Date("2020-12-31")
-Date_seq = seq(from = start_data, to = end_date, by = "day") %>% as.character()
+Date_seq = seq(from = start_data, to = end_date, by = "day") |> as.character()
 
 
 ## The City of shelter
