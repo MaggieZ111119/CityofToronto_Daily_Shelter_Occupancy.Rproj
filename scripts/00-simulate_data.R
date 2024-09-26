@@ -77,6 +77,11 @@ for (date in Date_seq) {
   }
 }
 
+# Make names of columns consistent to other sets
+simulated_dataset <- simulated_dataset |>
+  janitor::clean_names()
+
+
 # View the first few rows of the simulated dataset
 # head(simulated_dataset)
 

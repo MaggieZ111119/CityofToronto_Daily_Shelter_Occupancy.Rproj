@@ -22,14 +22,14 @@ cat("Total missing values: ", num_missing_values, "\n")
 
 
 ## TEST2: Negative value (Total_Occupancy and Total_Capacity)
-negative_occupancy <- sum(simulated_dataset$Total_Occupancy < 0)
-negative_capacity <- sum(simulated_dataset$Total_Capacity < 0)
+negative_occupancy <- sum(simulated_dataset$total_occupancy < 0)
+negative_capacity <- sum(simulated_dataset$total_capacity < 0)
 cat("Total negative occupancy values: ", negative_occupancy, "\n")
 cat("Total negative capacity values: ", negative_capacity, "\n")
 
 
 ## TEST3: Date Format is consistent
-incorrect_dates <- sum(!grepl("^\\d{4}-\\d{2}-\\d{2}$", simulated_dataset$OCCUPANCY_DATE))
+incorrect_dates <- sum(!grepl("^\\d{4}-\\d{2}-\\d{2}$", simulated_dataset$date))
 
 if (incorrect_dates > 0) {
   message("Warning: ", incorrect_dates, " dates are not in the correct format (YYYY-MM-DD).")
