@@ -14,7 +14,7 @@ City of Toronto Shelter data of 2017, 2018, 2019, and 2020 can be accessed from 
 
 ## File Structure
 
-The repo is structured as:
+The repository is structured as follows:
 
 -   `other/sketches` contains the hand-drawn visualization on of how to do with the data
 -   `other/llms` contains history with LLM ChatGPT, which was used to assist the code construct through the paper
