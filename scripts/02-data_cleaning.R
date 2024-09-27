@@ -35,12 +35,12 @@ cleaned_2017 <- cleaned_2017 |>
   group_by(occupancy_date,shelter_city,sector) |> 
   summarize(
     # occupancy number in each city for each sector 
-    totoal_occupancy = sum(occupancy, na.rm = TRUE),
+    total_occupancy = sum(occupancy, na.rm = TRUE),
     # occupancy number in each city for each sector 
-    totoal_capacity = sum(capacity, na.rm = TRUE),
+    total_capacity = sum(capacity, na.rm = TRUE),
     .groups = 'drop') |>
   select(occupancy_date, shelter_city, sector, 
-         totoal_occupancy, totoal_capacity)
+         total_occupancy, total_capacity)
 
 # Make sure date format is consistent with other three datasets
 cleaned_2017$occupancy_date <-  as.Date(cleaned_2017$occupancy_date, 
@@ -59,12 +59,12 @@ cleaned_2018 <- cleaned_2018 |>
   group_by(occupancy_date,shelter_city,sector) |> 
   summarize(
     # occupancy number in each city for each sector 
-    totoal_occupancy = sum(occupancy, na.rm = TRUE),
+    total_occupancy = sum(occupancy, na.rm = TRUE),
     # occupancy number in each city for each sector 
-    totoal_capacity = sum(capacity, na.rm = TRUE),
+    total_capacity = sum(capacity, na.rm = TRUE),
     .groups = 'drop') |>
   select(occupancy_date, shelter_city, sector, 
-         totoal_occupancy, totoal_capacity)
+         total_occupancy, total_capacity)
 
 # Make sure date format is consistent with other three datasets
 cleaned_2018$occupancy_date <-  as.Date(cleaned_2018$occupancy_date, 
@@ -82,12 +82,12 @@ cleaned_2019 <- cleaned_2019 |>
   group_by(occupancy_date,shelter_city,sector) |> 
   summarize(
     # occupancy number in each city for each sector 
-    totoal_occupancy = sum(occupancy, na.rm = TRUE),
+    total_occupancy = sum(occupancy, na.rm = TRUE),
     # occupancy number in each city for each sector 
-    totoal_capacity = sum(capacity, na.rm = TRUE),
+    total_capacity = sum(capacity, na.rm = TRUE),
     .groups = 'drop') |>
   select(occupancy_date, shelter_city, sector, 
-         totoal_occupancy, totoal_capacity)
+         total_occupancy, total_capacity)
 
 # Make sure date format is consistent with other three datasets
 cleaned_2019$occupancy_date <-  as.Date(cleaned_2019$occupancy_date, 
@@ -105,12 +105,12 @@ cleaned_2020 <- cleaned_2020 |>
   group_by(occupancy_date,shelter_city,sector) |> 
   summarize(
     # occupancy number in each city for each sector 
-    totoal_occupancy = sum(occupancy, na.rm = TRUE),
+    total_occupancy = sum(occupancy, na.rm = TRUE),
     # occupancy number in each city for each sector 
-    totoal_capacity = sum(capacity, na.rm = TRUE),
+    total_capacity = sum(capacity, na.rm = TRUE),
     .groups = 'drop') |>
   select(occupancy_date, shelter_city, sector, 
-         totoal_occupancy, totoal_capacity)
+         total_occupancy, total_capacity)
 
 # Make sure date format is consistent with other three datasets
 # Special notice here, 2020 have different date naming structure tha others.
@@ -121,6 +121,7 @@ cleaned_2020$occupancy_date <- format(as.Date(cleaned_2020$occupancy_date,
 ## Combine 4 dataset in order
 full_shelter_data <- rbind(cleaned_2017, cleaned_2018,
                            cleaned_2019, cleaned_2020)
+
 
 
 head(full_shelter_data)

@@ -1,4 +1,4 @@
-occupancy_date,shelter_city,sector,totoal_occupancy,totoal_capacity
+occupancy_date,shelter_city,sector,total_occupancy,total_capacity
 2017-01-01,Etobicoke,Youth,53,53
 2017-01-01,North York,Youth,72,73
 2017-01-01,Scarborough,Co-ed,67,67

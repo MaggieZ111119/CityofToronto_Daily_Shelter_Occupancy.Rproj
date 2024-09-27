@@ -39,19 +39,336 @@ This paper focuses on analyzing shelter occupancy data from 2017 to 2020 in City
 
 FINDING! This study addresses a clear gap in the current literature by providing an up-to-date analysis of Toronto's shelter capacity and usage during a time of unprecedented public health and social challenges. ___ NOTICE!!
 
-The remiander of this paper are in presented in sections: @sec-data : Data, @sec-results :Results, and @sec-discussion :Discussion. The data section introduce the dataset used for analysis, expalinin its source and context that shaped its collection.This section thoroughly summarizes the data using visualizations created with ggplot2 (@R-ggplot2) and tables produced with knitr (@R-knitr). Key variables chosen for the analysis, along with the reasoning behind their selection, are explained. The results section presents the findings drawn from the data, highlighting patterns in shelter occupancy and compare to it's availability. Following by the discussion section, which explores the implications of these findings, particularly in relation to resource allocation and policy development, offering insights into how Toronto's shelter system responded to increasing demand.
+The remiander of this paper are in presented in sections: @sec-data : Data, @sec-results :Results, and @sec-discussion :Discussion. The data section introduce the dataset used for analysis, expalinin its source and context that shaped its collection.This section thoroughly summarizes the data using visualizations created with `ggplot2` (@R-ggplot2) and tables produced with `knitr` (@R-knitr). Key variables chosen for the analysis, along with the reasoning behind their selection, are explained. The results section presents the findings drawn from the data, highlighting patterns in shelter occupancy and compare to it's availability. Following by the discussion section, which explores the implications of these findings, particularly in relation to resource allocation and policy development, offering insights into how Toronto's shelter system responded to increasing demand.
 
 
 # Data {#sec-data}
-City that has record of offering shleter servise incluede: Toronto, North York, Scarborough, and Etobicoke.
+City that has record of offering shleter servise incluede: Toronto, North York, Scarborough, and Etobicoke. 
 
+## Overview {#sec-data-overview}
+All data reviewed and analysis in this paper is the Daily Shelter Occupancy @Shelter. The data is essential for evaluating how shelters serve different populations (e.g., men, women, youth, families) and for analyzing the current shelter servise system over time, such as capacity shortfalls or surpluses. It provides inforamtion on all the active shelters exist in the City of Toronto area, collected in forms of four separate datasets corresponding to the years 2017, 2018, 2019, and 2020. Each datasets include various characteristics of the shelters. The data was sourced from an Open Data Toronto Portal @OpenDataToronto, with each row indicate a unique entry for a specific sector of specific shelter, on a specific date, and has Unique row identifier for Open Data database, "_id". 
+
+The collection process records information about corresponding name of the non-profit entity that is responsible for the shelter, as well as the name of the facility (e.g. hotel, residence building), along with and their capacity to accommodate homeless clients. The Capacity is being measured as number of bed or a mat/cot available. Something will happen is that for the family sector, it is possible to exceed available capacity depending on the bed number, because family could be accommodated in a room with number beds smaller than number of people in their family.  The data was collected every day, 4:00 AM, to record number of homeless clients occupying the shelters. This way to gather information about occupancy provides a consistent snapshot of shelter use across all organizations. 
+
+Other similar datasets, especialy the ther dataset publish by Toronto Shelter & Support Services, were considered. However, they did not offer the cross-sector view of both occupancy and capacity needed for the focus of this analysis. The selected dataset allows for a broad comparison across time and sectors in different city, providing a fuller picture of trends within the shelter system.
+
+
+
+## Feature Selection and Aggregation
+
+For the purpose of this analysis, several features are chose to be particularly focused on. variable of interest including the the city (named "SHELTER_CITY" in the dataset) in which shelters are located; the date of data recorded("OCCUPANCY_DATE"); the sector("SECTOR") of clientele the shelters serve, for example men, women, youth, families, and even co-ed; the shelter's capacities("CAPACITY") and occupancy("OCCUPANCY") levels. These variables were chosen for their relevance in which is to investigate shelter occupancy and capacity across different cities and sectors, focusing on the City of Toronto from 2017 to 2020.
+
+There are also seven other detailed feature in the datasets: "ORGANIZATION_NAME", "SHELTER_NAME", "SHELTER_ADDRESS", "SHELTER_PROVINCE", "SHELTER_POSTAL_CODE", "FACILITY_NAME", and "PROGRAM_NAME". Using R programming lanaguage @citeR, the `janitor`@R-janitor, `tidyverse` @R-tidyverse, and `dplyr` @R-dplyr pakages are used in data simulation, downloading, cleaning, and writting test. No new variables were created for this analysis, but the data was aggregated by grouping observations by city, date, and sector. This aggregation facilitated a more comprehensive comparison across cities and sector groups. A random sample of the cleaned data can be seen in @sample-shelter.
+```{r}
+#| label: sample-shelter
+#| tbl-cap: Sample of Cleaned Shelter Data
+#| echo: false
+
+set.seed(1009633096)
+indices <- sample(1:nrow(shelter_data), 5)
+
+kable(shelter_data[indices,])
+
+```
+
+
+
+## Data Breakdown
+As shown in @shelter-full-table, The four cities being observed in the dataset are Toronto, Etobicoke, North York, and Scarborough. The sectors recorded include Co-ed (mixture), Families, Men, Women, and Youth. 
+```{r}
+#| label: shelter-full-table
+#| tbl-cap: Number of Observations by City and Sector
+#| echo: false
+#| 
+# Count the number of observations by city and sector
+city_sector_breakdown <- shelter_data %>%
+  group_by(shelter_city, sector) %>%
+  count() %>%
+  spread(key = sector, value = n, fill = 0)
+
+# Check if the total is being calculated correctly
+city_sector_breakdown$Sum <- rowSums(city_sector_breakdown[,2:6], na.rm = TRUE)
+
+# Display the table with correct formatting
+city_sector_breakdown %>%
+  kable(caption = "Number of Observations by City and Sector, including all sectors")
+
+
+```
+
+The following table provides a summary of the average, maximum, and minimum occupancy, as well as capacity metrics for each city.
+```{r}
+#| label: shelter-by-city
+#| tbl-cap: Statistics for Homeless Shelter Occupancy by City
+#| echo: false
+
+# Because the data originally has one date and is separated into several rows with different sectors. 
+# If I want to calculate the total occupancy of that date in that city, I need to add all sector information together. Then, we will see the average, max, mix of occupancy. 
+# Same idea to capacity.
+
+toronto_data <- shelter_data %>% 
+  filter(shelter_city == "Toronto") %>% 
+  group_by(occupancy_date) %>%
+  summarise(
+    total_occupancy = sum(total_occupancy, na.rm = TRUE),
+    total_capacity = sum(total_capacity, na.rm = TRUE),
+    .groups = 'drop'
+  )
+
+north_york_data <- shelter_data %>% 
+  filter(shelter_city == "North York") %>%
+  group_by(occupancy_date) %>%
+  summarise(
+    total_occupancy = sum(total_occupancy, na.rm = TRUE),
+    total_capacity = sum(total_capacity, na.rm = TRUE),
+    .groups = 'drop'
+  )
+  
+
+scarborough_data <- shelter_data %>% 
+  filter(shelter_city == "Scarborough")%>%
+  group_by(occupancy_date) %>%
+  summarise(
+    total_occupancy = sum(total_occupancy, na.rm = TRUE),
+    total_capacity = sum(total_capacity, na.rm = TRUE),
+    .groups = 'drop'
+  )
+
+etobicoke_data <- shelter_data %>% 
+  filter(shelter_city == "Etobicoke") %>%
+  group_by(occupancy_date) %>%
+  summarise(
+    total_occupancy = sum(total_occupancy, na.rm = TRUE),
+    total_capacity = sum(total_capacity, na.rm = TRUE),
+    .groups = 'drop'
+  )
+
+# Summary statistics for each city
+toronto_summary <- toronto_data %>%
+  summarise(
+    avg_occupancy = mean(total_occupancy, na.rm = TRUE),
+    max_occupancy = max(total_occupancy, na.rm = TRUE),
+    min_occupancy = min(total_occupancy, na.rm = TRUE),
+    avg_capacity = mean(total_capacity, na.rm = TRUE),
+    max_capacity = max(total_capacity, na.rm = TRUE),
+    min_capacity = min(total_capacity, na.rm = TRUE)
+  ) 
+ 
+
+north_york_summary <- north_york_data %>%
+  summarise(
+    avg_occupancy = mean(total_occupancy, na.rm = TRUE),
+    max_occupancy = max(total_occupancy, na.rm = TRUE),
+    min_occupancy = min(total_occupancy, na.rm = TRUE),
+    avg_capacity = mean(total_capacity, na.rm = TRUE),
+    max_capacity = max(total_capacity, na.rm = TRUE),
+    min_capacity = min(total_capacity, na.rm = TRUE)
+  )
+
+
+scarborough_summary <- scarborough_data %>%
+  summarise(
+    avg_occupancy = mean(total_occupancy, na.rm = TRUE),
+    max_occupancy = max(total_occupancy, na.rm = TRUE),
+    min_occupancy = min(total_occupancy, na.rm = TRUE),
+    avg_capacity = mean(total_capacity, na.rm = TRUE),
+    max_capacity = max(total_capacity, na.rm = TRUE),
+    min_capacity = min(total_capacity, na.rm = TRUE)
+  )
+
+
+etobicoke_summary <- etobicoke_data %>%
+  summarise(
+    avg_occupancy = mean(total_occupancy, na.rm = TRUE),
+    max_occupancy = max(total_occupancy, na.rm = TRUE),
+    min_occupancy = min(total_occupancy, na.rm = TRUE),
+    avg_capacity = mean(total_capacity, na.rm = TRUE),
+    max_capacity = max(total_capacity, na.rm = TRUE),
+    min_capacity = min(total_capacity, na.rm = TRUE)
+  ) 
+  
+
+
+city <- c("Toronto", "North York", "Scarborough", "Etobicoke")
+combined_summary <- bind_rows(toronto_summary,
+                          north_york_summary,
+                          scarborough_summary,
+                          etobicoke_summary)
+combined_summary$city <- city
+combined_summary <- combined_summary %>%
+  select(city, everything()) 
+
+kable(combined_summary, 
+             col.names = c("City", 
+                           "Average Occupancy", 
+                           "Max Occupancy", 
+                           "Min Occupancy", 
+                           "Average Capacity", 
+                           "Max Capacity", 
+                           "Min Capacity"))
+```
+The relastion ship of two key feature, occupancy and capacity, are essential for understaidng current shelter servise system. The relashipship is reflected in @fig-occupancy-capacity-relashionship. More learning on the shelter servise and thier trend, and how they reflect the fomeless population are done, and will be discuss in the next section @sec-result.
+```{r}
+#| label: fig-occupancy-capacity-relashionship
+#| fig-cap: Relationship Between Total Occupancy and Total Capacity in Shelter of the City of Toronto
+#| fig-pos: "H"
+#| echo: false
+#| message: false
+
+ggplot(shelter_data, aes(x = total_capacity, y = total_occupancy, color = sector)) +
+  geom_point(alpha = 0.5) + 
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(title = "Relationship Between Total Occupancy and Total Capacity in Toronto Shelters",
+       x = "Total Capacity",
+       y = "Total Occupancy",
+       color = "Sector") +
+  theme_minimal() +
+  scale_color_brewer(palette = "Set1")
+
+```
 
 
 # Results {#sec-results}
-This histogram reflects the amount new marriage happens each year from the year of 2011 to 2024 according to @OpenDataToronto.
+Through phafical study of the datset, some usful information are found and the result will be dicussed in this section. These will __________________________
+
+## Shelter Occupancy Trend over Time
+The figure
+```{r}
+#| label: shelter-over-time
+#| fig-cap: Visualization of Shelter _____ During Time Period 2017 to 2020
+#| echo: false
+#| message: false
+
+# Assuming you have a data frame 'shelter_data' with total occupancy for each city
+# Create individual plots for each city
+toronto_plot <- ggplot(toronto_data %>% slice(seq(1, n(), by = 50)), aes(x = occupancy_date, y = total_occupancy)) +
+  geom_line(color = "blue") +
+  labs(title = "Toronto Occupancy Trends",
+       x = "Date",
+       y = "Total Occupancy") +
+  theme_minimal()
+
+north_york_plot <- ggplot(north_york_data%>% slice(seq(1, n(), by = 50)), aes(x = occupancy_date, y = total_occupancy)) +
+  geom_line(color = "green") +
+  labs(title = "North York Occupancy Trends",
+       x = "Date",
+       y = "Total Occupancy") +
+  theme_minimal()
+
+scarborough_plot <- ggplot(scarborough_data%>% slice(seq(1, n(), by = 50)), aes(x = occupancy_date, y = total_occupancy)) +
+  geom_line(color = "red") +
+  labs(title = "Scarborough Occupancy Trends",
+       x = "Date",
+       y = "Total Occupancy") +
+  theme_minimal()
+
+etobicoke_plot <- ggplot(etobicoke_data%>% slice(seq(1, n(), by = 50)), aes(x = occupancy_date, y = total_occupancy)) +
+  geom_line(color = "orange") +
+  labs(title = "Etobicoke Occupancy Trends",
+       x = "Date",
+       y = "Total Occupancy") +
+  theme_minimal()
+
+# Present 4 plot together
+combined_plots <- grid.arrange(toronto_plot, north_york_plot,
+                                scarborough_plot, etobicoke_plot,
+                                nrow = 2, ncol = 2)
+
+combined_plots
+
+```
+
+## Shelter Ustillization Analysis
+To analyze capacity utilization for the four cities—Toronto, North York, Scarborough, and Etobicoke— calculate the capacity utilization rate for each city over time and visualize this data. 
+```{r}
+#| label: shelter-utilization
+#| fig-cap: Change in Utilization Rate Average on All Shelters by City (2017-2020)
+#| echo: false
+#| message: false
+
+# Calculate utilization rate by city
+toronto_data <- toronto_data %>%
+  mutate(utilization_rate = total_occupancy / total_capacity)
+
+north_york_data <- north_york_data %>%
+  mutate(utilization_rate = total_occupancy / total_capacity)
+
+scarborough_data <- scarborough_data %>%
+  mutate(utilization_rate = total_occupancy / total_capacity)
+
+etobicoke_data <- etobicoke_data %>%
+  mutate(utilization_rate = total_occupancy / total_capacity)
+
+# Combine all city datasets
+combined_data <- bind_rows(
+  toronto_data %>% mutate(shelter_city = "Toronto"),
+  north_york_data %>% mutate(shelter_city = "North York"),
+  scarborough_data %>% mutate(shelter_city = "Scarborough"),
+  etobicoke_data %>% mutate(shelter_city = "Etobicoke")
+)
+
+# Extract year from occupancy_date
+combined_data <- combined_data %>%
+  mutate(year = year(occupancy_date))
+
+# Calculate average utilization rate by year and city
+annual_utilization <- combined_data %>%
+  group_by(year, shelter_city) %>%
+  summarise(avg_utilization_rate = mean(utilization_rate, na.rm = TRUE), .groups = 'drop')
 
 
+ggplot(annual_utilization, aes(x = year, y = avg_utilization_rate, color = shelter_city)) +
+  geom_line(size = 1) +
+  geom_point(size = 2) +
+  labs(x = "Year",
+       y = "Average Utilization Rate",
+       color = "City") +
+  theme_minimal() +
+  scale_y_continuous(labels = scales::percent_format(scale = 100))  
+```
 
+
+## Over Capacity Cases
+Back to the original dataset, identify cases where shelter capacity is exceeded (i.e., occupancy > capacity) and understand the frequency and distribution of these events.
+```{r}
+#| label: over-capacity
+#| tbl-cap: Overcrowded Cases by City and Sector
+#| echo: false
+#| message: false
+
+# Filter for overcrowded data
+overcrowded_data <- shelter_data %>%
+  filter(total_occupancy > total_capacity)
+
+# Create a frequency table including all cities and sectors
+frequency_table <- overcrowded_data %>%
+  group_by(shelter_city, sector) %>%
+  summarise(count = n(), .groups = 'drop') %>%
+  complete(shelter_city, sector, fill = list(count = 0)) %>%
+  pivot_wider(names_from = sector, values_from = count)
+
+# Create a complete dataset of all combinations of cities and sectors
+all_combinations <- expand.grid(
+  shelter_city = unique(shelter_data$shelter_city),
+  sector = unique(shelter_data$sector)
+)
+
+# Create a frequency table including all cities and sectors
+frequency_table <- overcrowded_data %>%
+  group_by(shelter_city, sector) %>%
+  summarise(count = n(), .groups = 'drop') %>%
+  right_join(all_combinations, by = c("shelter_city", "sector")) %>%
+  replace_na(list(count = 0)) %>%
+  pivot_wider(names_from = sector, values_from = count, values_fill = 0)
+
+# View the frequency table with knitr
+frequency_table %>%
+  kable()
+
+```
+
+
+s
 
 # Discussion {#sec-discussion}
 
