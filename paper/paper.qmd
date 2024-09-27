@@ -24,7 +24,7 @@ library(tidyverse)
 library(ggplot2)
 library(dplyr)
 library(knitr)
-
+library(gridExtra)
 
 # Read Data(Quarto need data set to be readed in the file)
 shelter_data <- read_csv(here::here("~/CityofToronto_Daily_Shelter_Occupancy.Rproj/data/analysis_data/full_shelter_data.csv"), show_col_types = FALSE)
@@ -368,7 +368,7 @@ frequency_table %>%
 ```
 
 
-s
+
 
 # Discussion {#sec-discussion}
 
