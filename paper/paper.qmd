@@ -45,21 +45,21 @@ The remainder of this paper is presented in sections: @sec-data :Data, @sec-resu
 
 
 # Data {#sec-data}
-All data reviewed and analysis in this paper is the Daily Shelter Occupancy @Shelter. The data is essential for evaluating how shelters serve different populations (e.g., men, women, youth, families) and for analyzing the current shelter servise system over time, such as capacity shortfalls or surpluses. It provides inforamtion on all the active shelters exist in the City of Toronto area, collected in forms of four separate datasets corresponding to the years 2017, 2018, 2019, and 2020. 
+All data reviewed and analyzed in this paper comes from the Daily Shelter Occupancy (@Shelter), on Open Data Toronto Portal @OpenDataToronto. This data is essential for evaluating how shelters serve various populations (e.g., men, women, youth, families) and for analyzing the shelter service system during and after the pandemic, including capacity shortfalls or surpluses. It provides information on all active shelters in the City of Toronto, collected in four separate datasets corresponding to the years 2017, 2018, 2019, and 2020.
+
 
 ## Overview {#sec-data-overview}
-Each datasets include various characteristics of the shelters. The data was sourced from an Open Data Toronto Portal @OpenDataToronto, with each row indicate a unique entry for a specific sector of specific shelter, on a specific date, and has Unique row identifier for Open Data database, "_id". 
+Each dataset includes characteristics of the shelters. The data was sourced from the Open Data Toronto Portal @OpenDataToronto, with each row representing a unique entry for a specific sector of a specific shelter on a specific date. Each entry has a unique row identifier,  "_id", for the Open Data database. The collection process records information about the name of the non-profit organization responsible for the shelter, the name of the facility (e.g., hotel, residential building), and its capacity to accommodate homeless individual. Capacity is measured by the number of beds or mats/cots available. Data is collected at 4:00 AM each day to record the number of homeless clients occupying the shelters. This consistent method provides a accurate snapshot of shelter use across all organizations.
 
-The collection process records information about corresponding name of the non-profit entity that is responsible for the shelter, as well as the name of the facility (e.g. hotel, residence building), along with and their capacity to accommodate homeless clients. The Capacity is being measured as number of bed or a mat/cot available. Something will happen is that for the family sector, it is possible to exceed available capacity depending on the bed number, because family could be accommodated in a room with number beds smaller than number of people in their family.  The data was collected every day, 4:00 AM, to record number of homeless clients occupying the shelters. This way to gather information about occupancy provides a consistent snapshot of shelter use across all organizations. 
 
-Other similar datasets, especialy the ther dataset publish by Toronto Shelter & Support Services, were considered. However, they did not offer the cross-sector view of both occupancy and capacity needed for the focus of this analysis. The selected dataset allows for a broad comparison across time and sectors in different city, providing a fuller picture of trends within the shelter system.
+Other similar datasets, especially another one published by Toronto Shelter & Support Services, were considered; however, they did not provide the cross-sector view of both occupancy and capacity needed for this analysis. The selected dataset allows for broad comparisons across time (importantly covering the period of the pandemic outbreak) and sectors within different cities, providing a more comprehensive picture of trends within the shelter system.
 
 
 ## Feature Selection and Aggregation
 
-For the purpose of this analysis, several features are chose to be particularly focused on. variable of interest including the the city (named "SHELTER_CITY" in the dataset) in which shelters are located; the date of data recorded("OCCUPANCY_DATE"); the sector("SECTOR") of clientele the shelters serve, for example men, women, youth, families, and even co-ed; the shelter's capacities("CAPACITY") and occupancy("OCCUPANCY") levels. These variables were chosen for their relevance in which is to investigate shelter occupancy and capacity across different cities and sectors, focusing on the City of Toronto from 2017 to 2020.
+This analysis focuses on several key features. The variables of interest include the city ("SHELTER_CITY") where the shelters are located, the date of data recording ("OCCUPANCY_DATE"), the sector ("SECTOR") of clientele served by the shelters (e.g., men, women, youth, families, and co-ed), as well as the shelter's capacity ("CAPACITY") and occupancy ("OCCUPANCY") levels. These variables were selected for their relevance in examining shelter occupancy and capacity across different cities and sectors, with a particular emphasis on the City of Toronto from 2017 to 2020.
 
-There are also seven other detailed feature in the datasets: "ORGANIZATION_NAME", "SHELTER_NAME", "SHELTER_ADDRESS", "SHELTER_PROVINCE", "SHELTER_POSTAL_CODE", "FACILITY_NAME", and "PROGRAM_NAME". Using R programming lanaguage @citeR, the `janitor`@R-janitor, `tidyverse` @R-tidyverse, and `dplyr` @R-dplyr pakages are used in data simulation, downloading, cleaning, and writting test. No new variables were created for this analysis, but the data was aggregated by grouping observations by city, date, and sector. This aggregation facilitated a more comprehensive comparison across cities and sector groups. A random sample of the cleaned data can be seen in @fig-shelter-sample.
+The dataset also includes seven additional detailed features: "ORGANIZATION_NAME", which is the registered name of the entity in charge; "SHELTER_NAME", the name of the shelter sit; "SHELTER_ADDRESS", the address of the shelter, "SHELTER_PROVINCE", which are all Ontario in this case; "SHELTER_POSTAL_CODE", the postal code of the shelter; "FACILITY_NAME", the name of the facilities taking in homeless clients; and "PROGRAM_NAME", which means the name of actual programs or services within the facility. The R programming language @citeR, the `janitor`@R-janitor, `tidyverse` @R-tidyverse, and `dplyr` @R-dplyr packages are used in data simulation, downloading, cleaning, and writing test.  were utilized for data simulation, downloading, cleaning, and writing tests for data. No new variables were created for this analysis. The data was aggregated by grouping observations by city, date, and sector, enabling a more comprehensive comparison across cities and sector groups in the duration of time. A random sample of the cleaned data is presented in @fig-shelter-sample.
 ```{r}
 #| label: fig-shelter-sample
 #| tbl-cap: Sample of Cleaned Shelter Data
@@ -77,7 +77,8 @@ kable(shelter_data[indices,],
 
 
 ## Data Breakdown
-As shown in @fig-shelter-full-table, The four cities being observed in the dataset are Toronto, Etobicoke, North York, and Scarborough. The sectors recorded include Co-ed (mixture), Families, Men, Women, and Youth. Across all cities, record for Youth age group being presents. In fact, Youth is the only population in Etobicoke and North York. In Toronto, which has the most number of observation recorded, equal number of sectors are being observed, but how these people in distributed inthe total popluation are not clear. This will be further addressed in the following sections.
+As shown in @fig-shelter-full-table, the data includes observations from four cities: Toronto, Etobicoke, North York, and Scarborough. The recorded sectors encompass Co-ed (mixed), Families, Men, Women, and Youth. Notably, the Youth age group is represented across all cities, as well as being the only population recorded in Etobicoke and North York. Toronto, with the highest number of observations, includes an equal number of sectors, but the distribution of individuals within the total population is unclear. This aspect will be addressed in the following sections.
+
 ```{r}
 #| label: fig-shelter-full-table
 #| tbl-cap: Number of Observations by City and Sector
@@ -100,7 +101,7 @@ city_sector_breakdown %>%
 
 ```
 
-The following table @fig-shelter-diff-city provides a summary of the average, maximum, and minimum occupancy, as well as capacity metrics for each city. Toronto has most amount of shelter avaliable and also has most people occuupaying in. The Maximum occupany of Toronto in a day, combined all sectors, from 2017 to 2020,is 6803. Wheras Etobicoke only has 53 people occupanying. The fact that Etotobike has only hoemless people in the group of Youth recorded could explain alittle bit. But, the de=ifference still strong enough to see that the homeless population might be significant larger in Toronto compared to aother cities. 
+The following table @fig-shelter-diff-city summarizes the average, maximum, and minimum occupancy and capacity quantity for each city. Toronto has the highest number of shelters available by looking at the capacity; as well as the with greatest amount of individuals utilizing them. The maximum occupancy in Toronto, across all sectors from 2017 to 2020, reached 6,803 people, while Etobicoke had only 53 individuals occupying shelters. The fact that Etobicoke recorded homeless individuals solely within the Youth group provides some explanation, but the significant difference still implies that the homeless population in Toronto is much larger as compared to other cities.
 ```{r}
 #| label: fig-shelter-diff-city
 #| tbl-cap: Statistics for Homeless Shelter Occupancy by City
@@ -213,7 +214,8 @@ kable(combined_summary,
                            "Min Capacity"),
       caption = "Statistics for Homeless Shelter Occupancy by City")
 ```
-The relastion ship of two key feature, occupancy and capacity, are essential for understaidng current shelter servise system. The relashipship is reflected in @fig-occupancy-capacity-relashionship. Occupany and capacity are greatly follwing a positive correlation, indicating that most there aren't much over-investment to the shelter system, nor heavily over-filled shelter. But there are noticible deviation from the perfect correlation to above, these are suggecting there are cases where occupany is higher than capacity, suggesting occupantee may living in a overly paked places. More will be dicussed in  @sec-results, including other learning on the shelter servise like thier trend, and how these shelter information possiblly reflect the homeless.
+The relationship between two key features, occupancy and capacity, is essential for understanding the shelter service system for the period 2017 to 2020, as well as proposing possible improvements for the current system. This relationship is illustrated in @fig-occupancy-capacity-relationship. Occupancy and capacity show a good following to positive correlation, indicating that there is not much over-investment in the shelter system, nor are shelters heavily over-occupied. However, few noticeable deviations from perfect correlation suggest presence where occupancy exceeds capacity, indicating that some individuals in homeless condition may be accomading in overcrowded shelters Further discussions on trends in the shelter service system and how this data reflects the homeless population will be presented in @sec-results.
+
 ```{r}
 #| label: fig-occupancy-capacity-relashionship
 #| fig-cap: Relationship Between Total Occupancy and Total Capacity in Shelter of the City of Toronto
@@ -235,7 +237,8 @@ ggplot(shelter_data, aes(x = total_capacity, y = total_occupancy, color = sector
 
 
 # Results {#sec-results}
-Through grpahfical study of the datset, some usful information are found and the result will be dicussed in this section. 
+Through a graphical and numerical analysis of the dataset, some valuable insights into shelter system usage are uncovered. By visualizing the trends over time and studying data across different demographics and time, we can try to figure out how various factors influence the utilization and performance of shelter services. This section will delve into the findings, highlighting patterns and variation that emerged from the data. Additionally, we will discuss the implications of these results for working to address the living needs of homeless populations.
+
 
 ## Shelter Occupancy Trend over Time
 The figure @fig-shelter-over-time depicts the trend of homeless people occupying shelters in each city over time. A noticeable peak in occupancy is observed across all four cities between late 2019 and early 2020. Especially, there is an rising trend in Scarborough. This rise coincides with the outbreak of COVID-19, as noted in the "About Daily Shelter Occupancy" section in the data website @ShelterThe. significant decrease in occupancy from mid-2020 across all cities further supports this correlation, suggesting the pandemic had a direct impact on shelter use.
