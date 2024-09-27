@@ -58,16 +58,18 @@ Other similar datasets, especialy the ther dataset publish by Toronto Shelter & 
 
 For the purpose of this analysis, several features are chose to be particularly focused on. variable of interest including the the city (named "SHELTER_CITY" in the dataset) in which shelters are located; the date of data recorded("OCCUPANCY_DATE"); the sector("SECTOR") of clientele the shelters serve, for example men, women, youth, families, and even co-ed; the shelter's capacities("CAPACITY") and occupancy("OCCUPANCY") levels. These variables were chosen for their relevance in which is to investigate shelter occupancy and capacity across different cities and sectors, focusing on the City of Toronto from 2017 to 2020.
 
-There are also seven other detailed feature in the datasets: "ORGANIZATION_NAME", "SHELTER_NAME", "SHELTER_ADDRESS", "SHELTER_PROVINCE", "SHELTER_POSTAL_CODE", "FACILITY_NAME", and "PROGRAM_NAME". Using R programming lanaguage @citeR, the `janitor`@R-janitor, `tidyverse` @R-tidyverse, and `dplyr` @R-dplyr pakages are used in data simulation, downloading, cleaning, and writting test. No new variables were created for this analysis, but the data was aggregated by grouping observations by city, date, and sector. This aggregation facilitated a more comprehensive comparison across cities and sector groups. A random sample of the cleaned data can be seen in @fig-sample-shelter.
+There are also seven other detailed feature in the datasets: "ORGANIZATION_NAME", "SHELTER_NAME", "SHELTER_ADDRESS", "SHELTER_PROVINCE", "SHELTER_POSTAL_CODE", "FACILITY_NAME", and "PROGRAM_NAME". Using R programming lanaguage @citeR, the `janitor`@R-janitor, `tidyverse` @R-tidyverse, and `dplyr` @R-dplyr pakages are used in data simulation, downloading, cleaning, and writting test. No new variables were created for this analysis, but the data was aggregated by grouping observations by city, date, and sector. This aggregation facilitated a more comprehensive comparison across cities and sector groups. A random sample of the cleaned data can be seen in @fig-shelter-sample.
 ```{r}
-#| label: fig-sample-shelter
+#| label: fig-shelter-sample
 #| tbl-cap: Sample of Cleaned Shelter Data
 #| echo: false
+#| message: false
 
 set.seed(1009633096)
 indices <- sample(1:nrow(shelter_data), 5)
 
-kable(shelter_data[indices,])
+kable(shelter_data[indices,],
+      caption = "Sample of Cleaned Shelter Data")
 
 ```
 
@@ -79,7 +81,8 @@ As shown in @fig-shelter-full-table, The four cities being observed in the datas
 #| label: fig-shelter-full-table
 #| tbl-cap: Number of Observations by City and Sector
 #| echo: false
-#| 
+#| message: false
+
 # Count the number of observations by city and sector
 city_sector_breakdown <- shelter_data %>%
   group_by(shelter_city, sector) %>%
@@ -91,16 +94,17 @@ city_sector_breakdown$Sum <- rowSums(city_sector_breakdown[,2:6], na.rm = TRUE)
 
 # Display the table with correct formatting
 city_sector_breakdown %>%
-  kable(caption = "Number of Observations by City and Sector, including all sectors")
+  kable(caption = "Number of Observations by City and Sector")
 
 
 ```
 
-The following table @fig-shelter-by-city provides a summary of the average, maximum, and minimum occupancy, as well as capacity metrics for each city.
+The following table @fig-shelter-diff-city provides a summary of the average, maximum, and minimum occupancy, as well as capacity metrics for each city.
 ```{r}
-#| label: fig-shelter-by-city
+#| label: fig-shelter-diff-city
 #| tbl-cap: Statistics for Homeless Shelter Occupancy by City
 #| echo: false
+#| message: false
 
 # Because the data originally has one date and is separated into several rows with different sectors. 
 # If I want to calculate the total occupancy of that date in that city, I need to add all sector information together. Then, we will see the average, max, mix of occupancy. 
@@ -205,7 +209,8 @@ kable(combined_summary,
                            "Min Occupancy", 
                            "Average Capacity", 
                            "Max Capacity", 
-                           "Min Capacity"))
+                           "Min Capacity"),
+      caption = "Statistics for Homeless Shelter Occupancy by City")
 ```
 The relastion ship of two key feature, occupancy and capacity, are essential for understaidng current shelter servise system. The relashipship is reflected in @fig-occupancy-capacity-relashionship. More learning on the shelter servise and thier trend, and how they reflect the fomeless population are done, and will be discuss in the next section @sec-results
 ```{r}
@@ -218,7 +223,7 @@ The relastion ship of two key feature, occupancy and capacity, are essential for
 ggplot(shelter_data, aes(x = total_capacity, y = total_occupancy, color = sector)) +
   geom_point(alpha = 0.5) + 
   geom_smooth(method = "lm", se = FALSE) +
-  labs(title = "Relationship Between Total Occupancy and Total Capacity in Toronto Shelters",
+  labs(title = "Relationship Between Total Occupancy and Total Capacity in Shelter of the City of Toronto",
        x = "Total Capacity",
        y = "Total Occupancy",
        color = "Sector") +
@@ -232,10 +237,10 @@ ggplot(shelter_data, aes(x = total_capacity, y = total_occupancy, color = sector
 Through phafical study of the datset, some usful information are found and the result will be dicussed in this section. These will __________________________
 
 ## Shelter Occupancy Trend over Time
-The figure
+The figure @fig-shelter-over-time, a
 ```{r}
-#| label: shelter-over-time
-#| fig-cap: Visualization of Shelter _____ During Time Period 2017 to 2020
+#| label: fig-shelter-over-time
+#| fig-cap: Visualization of Shelter Occupancy During Time Period 2017 to 2020
 #| echo: false
 #| message: false
 
@@ -269,22 +274,26 @@ etobicoke_plot <- ggplot(etobicoke_data%>% slice(seq(1, n(), by = 50)), aes(x = 
        y = "Total Occupancy") +
   theme_minimal()
 
-# Present 4 plot together
-combined_plots <- grid.arrange(toronto_plot, north_york_plot,
-                                scarborough_plot, etobicoke_plot,
-                                nrow = 2, ncol = 2)
+combined_plot <- grid.arrange(toronto_plot, north_york_plot, 
+                               scarborough_plot, etobicoke_plot, 
+                               nrow = 2, ncol = 2,
+                               top = "Visualization of Shelter Occupancy During Time Period 2017 to 2020"
+                          )
 
-combined_plots
+# This will suppress the grid output in the document
+invisible(combined_plot)
 
 ```
 
+
 ## Shelter Ustillization Analysis
-To analyze capacity utilization for the four cities—Toronto, North York, Scarborough, and Etobicoke— calculate the capacity utilization rate for each city over time and visualize this data. 
+To analyze capacity utilization for the four cities—Toronto, North York, Scarborough, and Etobicoke— calculate the capacity utilization rate for each city over time and visualize this data. See @fig-shelter-utilization.
 ```{r}
-#| label: shelter-utilization
+#| label: fig-shelter-utilization
 #| fig-cap: Change in Utilization Rate Average on All Shelters by City (2017-2020)
 #| echo: false
 #| message: false
+#| warning: false
 
 # Calculate utilization rate by city
 toronto_data <- toronto_data %>%
@@ -322,16 +331,17 @@ ggplot(annual_utilization, aes(x = year, y = avg_utilization_rate, color = shelt
   geom_point(size = 2) +
   labs(x = "Year",
        y = "Average Utilization Rate",
-       color = "City") +
+       color = "City",
+       caption = "Utilization Rate Average Change on All Shelters by City") +
   theme_minimal() +
   scale_y_continuous(labels = scales::percent_format(scale = 100))  
 ```
 
 
 ## Over Capacity Cases
-Back to the original dataset, identify cases where shelter capacity is exceeded (i.e., occupancy > capacity) and understand the frequency and distribution of these events.
+Back to the original dataset, identify cases where shelter capacity is exceeded (i.e., occupancy > capacity) and understand the frequency and distribution of these events. see @fig-overcapacity, under
 ```{r}
-#| label: over-capacity
+#| label: fig-overcapacity
 #| tbl-cap: Overcrowded Cases by City and Sector
 #| echo: false
 #| message: false
@@ -363,7 +373,7 @@ frequency_table <- overcrowded_data %>%
 
 # View the frequency table with knitr
 frequency_table %>%
-  kable()
+  kable(caption = "Overcrowded Cases by City and Sector")
 
 ```
 
