@@ -58,9 +58,9 @@ Other similar datasets, especialy the ther dataset publish by Toronto Shelter & 
 
 For the purpose of this analysis, several features are chose to be particularly focused on. variable of interest including the the city (named "SHELTER_CITY" in the dataset) in which shelters are located; the date of data recorded("OCCUPANCY_DATE"); the sector("SECTOR") of clientele the shelters serve, for example men, women, youth, families, and even co-ed; the shelter's capacities("CAPACITY") and occupancy("OCCUPANCY") levels. These variables were chosen for their relevance in which is to investigate shelter occupancy and capacity across different cities and sectors, focusing on the City of Toronto from 2017 to 2020.
 
-There are also seven other detailed feature in the datasets: "ORGANIZATION_NAME", "SHELTER_NAME", "SHELTER_ADDRESS", "SHELTER_PROVINCE", "SHELTER_POSTAL_CODE", "FACILITY_NAME", and "PROGRAM_NAME". Using R programming lanaguage @citeR, the `janitor`@R-janitor, `tidyverse` @R-tidyverse, and `dplyr` @R-dplyr pakages are used in data simulation, downloading, cleaning, and writting test. No new variables were created for this analysis, but the data was aggregated by grouping observations by city, date, and sector. This aggregation facilitated a more comprehensive comparison across cities and sector groups. A random sample of the cleaned data can be seen in @sample-shelter.
+There are also seven other detailed feature in the datasets: "ORGANIZATION_NAME", "SHELTER_NAME", "SHELTER_ADDRESS", "SHELTER_PROVINCE", "SHELTER_POSTAL_CODE", "FACILITY_NAME", and "PROGRAM_NAME". Using R programming lanaguage @citeR, the `janitor`@R-janitor, `tidyverse` @R-tidyverse, and `dplyr` @R-dplyr pakages are used in data simulation, downloading, cleaning, and writting test. No new variables were created for this analysis, but the data was aggregated by grouping observations by city, date, and sector. This aggregation facilitated a more comprehensive comparison across cities and sector groups. A random sample of the cleaned data can be seen in @fig-sample-shelter.
 ```{r}
-#| label: sample-shelter
+#| label: fig-sample-shelter
 #| tbl-cap: Sample of Cleaned Shelter Data
 #| echo: false
 
@@ -74,9 +74,9 @@ kable(shelter_data[indices,])
 
 
 ## Data Breakdown
-As shown in @shelter-full-table, The four cities being observed in the dataset are Toronto, Etobicoke, North York, and Scarborough. The sectors recorded include Co-ed (mixture), Families, Men, Women, and Youth. 
+As shown in @fig-shelter-full-table, The four cities being observed in the dataset are Toronto, Etobicoke, North York, and Scarborough. The sectors recorded include Co-ed (mixture), Families, Men, Women, and Youth. 
 ```{r}
-#| label: shelter-full-table
+#| label: fig-shelter-full-table
 #| tbl-cap: Number of Observations by City and Sector
 #| echo: false
 #| 
@@ -96,9 +96,9 @@ city_sector_breakdown %>%
 
 ```
 
-The following table provides a summary of the average, maximum, and minimum occupancy, as well as capacity metrics for each city.
+The following table @fig-shelter-by-city provides a summary of the average, maximum, and minimum occupancy, as well as capacity metrics for each city.
 ```{r}
-#| label: shelter-by-city
+#| label: fig-shelter-by-city
 #| tbl-cap: Statistics for Homeless Shelter Occupancy by City
 #| echo: false
 
@@ -207,7 +207,7 @@ kable(combined_summary,
                            "Max Capacity", 
                            "Min Capacity"))
 ```
-The relastion ship of two key feature, occupancy and capacity, are essential for understaidng current shelter servise system. The relashipship is reflected in @fig-occupancy-capacity-relashionship. More learning on the shelter servise and thier trend, and how they reflect the fomeless population are done, and will be discuss in the next section @sec-result.
+The relastion ship of two key feature, occupancy and capacity, are essential for understaidng current shelter servise system. The relashipship is reflected in @fig-occupancy-capacity-relashionship. More learning on the shelter servise and thier trend, and how they reflect the fomeless population are done, and will be discuss in the next section @sec-results
 ```{r}
 #| label: fig-occupancy-capacity-relashionship
 #| fig-cap: Relationship Between Total Occupancy and Total Capacity in Shelter of the City of Toronto
