@@ -43,15 +43,14 @@ The remiander of this paper are in presented in sections: @sec-data : Data, @sec
 
 
 # Data {#sec-data}
-City that has record of offering shleter servise incluede: Toronto, North York, Scarborough, and Etobicoke. 
+All data reviewed and analysis in this paper is the Daily Shelter Occupancy @Shelter. The data is essential for evaluating how shelters serve different populations (e.g., men, women, youth, families) and for analyzing the current shelter servise system over time, such as capacity shortfalls or surpluses. It provides inforamtion on all the active shelters exist in the City of Toronto area, collected in forms of four separate datasets corresponding to the years 2017, 2018, 2019, and 2020. 
 
 ## Overview {#sec-data-overview}
-All data reviewed and analysis in this paper is the Daily Shelter Occupancy @Shelter. The data is essential for evaluating how shelters serve different populations (e.g., men, women, youth, families) and for analyzing the current shelter servise system over time, such as capacity shortfalls or surpluses. It provides inforamtion on all the active shelters exist in the City of Toronto area, collected in forms of four separate datasets corresponding to the years 2017, 2018, 2019, and 2020. Each datasets include various characteristics of the shelters. The data was sourced from an Open Data Toronto Portal @OpenDataToronto, with each row indicate a unique entry for a specific sector of specific shelter, on a specific date, and has Unique row identifier for Open Data database, "_id". 
+Each datasets include various characteristics of the shelters. The data was sourced from an Open Data Toronto Portal @OpenDataToronto, with each row indicate a unique entry for a specific sector of specific shelter, on a specific date, and has Unique row identifier for Open Data database, "_id". 
 
 The collection process records information about corresponding name of the non-profit entity that is responsible for the shelter, as well as the name of the facility (e.g. hotel, residence building), along with and their capacity to accommodate homeless clients. The Capacity is being measured as number of bed or a mat/cot available. Something will happen is that for the family sector, it is possible to exceed available capacity depending on the bed number, because family could be accommodated in a room with number beds smaller than number of people in their family.  The data was collected every day, 4:00 AM, to record number of homeless clients occupying the shelters. This way to gather information about occupancy provides a consistent snapshot of shelter use across all organizations. 
 
 Other similar datasets, especialy the ther dataset publish by Toronto Shelter & Support Services, were considered. However, they did not offer the cross-sector view of both occupancy and capacity needed for the focus of this analysis. The selected dataset allows for a broad comparison across time and sectors in different city, providing a fuller picture of trends within the shelter system.
-
 
 
 ## Feature Selection and Aggregation
@@ -76,7 +75,7 @@ kable(shelter_data[indices,],
 
 
 ## Data Breakdown
-As shown in @fig-shelter-full-table, The four cities being observed in the dataset are Toronto, Etobicoke, North York, and Scarborough. The sectors recorded include Co-ed (mixture), Families, Men, Women, and Youth. 
+As shown in @fig-shelter-full-table, The four cities being observed in the dataset are Toronto, Etobicoke, North York, and Scarborough. The sectors recorded include Co-ed (mixture), Families, Men, Women, and Youth. Across all cities, record for Youth age group being presents. In fact, Youth is the only population in Etobicoke and North York. In Toronto, which has the most number of observation recorded, equal number of sectors are being observed, but how these people in distributed inthe total popluation are not clear. This will be further addressed in the following sections.
 ```{r}
 #| label: fig-shelter-full-table
 #| tbl-cap: Number of Observations by City and Sector
@@ -99,7 +98,7 @@ city_sector_breakdown %>%
 
 ```
 
-The following table @fig-shelter-diff-city provides a summary of the average, maximum, and minimum occupancy, as well as capacity metrics for each city.
+The following table @fig-shelter-diff-city provides a summary of the average, maximum, and minimum occupancy, as well as capacity metrics for each city. Toronto has most amount of shelter avaliable and also has most people occuupaying in. The Maximum occupany of Toronto in a day, combined all sectors, from 2017 to 2020,is 6803. Wheras Etobicoke only has 53 people occupanying. The fact that Etotobike has only hoemless people in the group of Youth recorded could explain alittle bit. But, the de=ifference still strong enough to see that the homeless population might be significant larger in Toronto compared to aother cities. 
 ```{r}
 #| label: fig-shelter-diff-city
 #| tbl-cap: Statistics for Homeless Shelter Occupancy by City
@@ -212,7 +211,7 @@ kable(combined_summary,
                            "Min Capacity"),
       caption = "Statistics for Homeless Shelter Occupancy by City")
 ```
-The relastion ship of two key feature, occupancy and capacity, are essential for understaidng current shelter servise system. The relashipship is reflected in @fig-occupancy-capacity-relashionship. More learning on the shelter servise and thier trend, and how they reflect the fomeless population are done, and will be discuss in the next section @sec-results
+The relastion ship of two key feature, occupancy and capacity, are essential for understaidng current shelter servise system. The relashipship is reflected in @fig-occupancy-capacity-relashionship. Occupany and capacity are greatly follwing a positive correlation, indicating that most there aren't much over-investment to the shelter system, nor heavily over-filled shelter. But there are noticible deviation from the perfect correlation to above, these are suggecting there are cases where occupany is higher than capacity, suggesting occupantee may living in a overly paked places. More will be dicussed in  @sec-results, including other learning on the shelter servise like thier trend, and how these shelter information possiblly reflect the homeless.
 ```{r}
 #| label: fig-occupancy-capacity-relashionship
 #| fig-cap: Relationship Between Total Occupancy and Total Capacity in Shelter of the City of Toronto
@@ -234,10 +233,10 @@ ggplot(shelter_data, aes(x = total_capacity, y = total_occupancy, color = sector
 
 
 # Results {#sec-results}
-Through phafical study of the datset, some usful information are found and the result will be dicussed in this section. These will __________________________
+Through grpahfical study of the datset, some usful information are found and the result will be dicussed in this section. 
 
 ## Shelter Occupancy Trend over Time
-The figure @fig-shelter-over-time, a
+The figure @fig-shelter-over-time as dipict the trend of homless poeple occupiying shelters in each city. A high in occupancy are notice in all four city around the time between late 2019 to early 2020. Especially, there is a obviouse rising trend in Scarborough. Combined with the information on the "About Daily Shelter Occupancy" section in the data website @Shelter, it rise may be subjectted to the ourbreak of COVID_19. The occpany number going significantly decrease from mid 2020, across all four cities also suggest this finding. 
 ```{r}
 #| label: fig-shelter-over-time
 #| fig-cap: Visualization of Shelter Occupancy During Time Period 2017 to 2020
@@ -286,11 +285,13 @@ invisible(combined_plot)
 ```
 
 
-## Shelter Ustillization Analysis
-To analyze capacity utilization for the four cities—Toronto, North York, Scarborough, and Etobicoke— calculate the capacity utilization rate for each city over time and visualize this data. See @fig-shelter-utilization.
+## Shelter Utilization Analysis
+The Utilization Rate as being calculated as:
+$$\text{Utilization Rate} = \left( \frac{\text{Number of Occupancy}}{\text{Number of Capacity}} \right) \times 100\%$$
+From @fig-shelter-utilization, it's the utilization rate in Toronto remains the lowest over 4 years almost all the time compared to other cities, but still in a relativly high number. This suggest that shelter servise croass all four cities are not over-inveseting, their servise are actually helping the hoemelss population since alot of people are using them. There is a significant decrease in utilization rate from Fall 2019 to Summer 2020, despite the increase in occupation number as sugessted in @fig-shelter-over-time. This incicated that more shelter are timely provided, the goverment are providing larger amount of shelter than usual during pandemic. This actully can be visulized in @fig-shelter-provided, espcially in the case for Scarborugh, there is a noticibke peak at very end of 2019 and start of 2020.
 ```{r}
 #| label: fig-shelter-utilization
-#| fig-cap: Change in Utilization Rate Average on All Shelters by City (2017-2020)
+#| fig-cap: Yearly change in Utilization Rate Average on All Shelters by City (2017-2020)
 #| echo: false
 #| message: false
 #| warning: false
@@ -318,28 +319,97 @@ combined_data <- bind_rows(
 
 # Extract year from occupancy_date
 combined_data <- combined_data %>%
-  mutate(year = year(occupancy_date))
+  mutate(year = year(occupancy_date),
+         month = month(occupancy_date),
+         season = case_when(
+           month %in% c(12, 1, 2) ~ "Winter",
+           month %in% c(3, 4, 5) ~ "Spring",
+           month %in% c(6, 7, 8) ~ "Summer",
+           month %in% c(9, 10, 11) ~ "Fall"
+         ))
 
-# Calculate average utilization rate by year and city
+
+# Have data into seasons
+combined_data <- combined_data %>%
+  mutate(season_year = factor(paste(season, year), 
+                               levels = c("Winter 2017", "Spring 2017", "Summer 2017", "Fall 2017",
+                                          "Winter 2018", "Spring 2018", "Summer 2018", "Fall 2018",
+                                          "Winter 2019", "Spring 2019", "Summer 2019", "Fall 2019",
+                                          "Winter 2020", "Spring 2020", "Summer 2020", "Fall 2020")))
+
+# Calculate average utilization rate
 annual_utilization <- combined_data %>%
-  group_by(year, shelter_city) %>%
+  group_by(season_year, shelter_city) %>%
   summarise(avg_utilization_rate = mean(utilization_rate, na.rm = TRUE), .groups = 'drop')
 
 
-ggplot(annual_utilization, aes(x = year, y = avg_utilization_rate, color = shelter_city)) +
+
+ggplot(annual_utilization, aes(x = season_year, y = avg_utilization_rate, color = shelter_city, group = shelter_city)) +
   geom_line(size = 1) +
   geom_point(size = 2) +
-  labs(x = "Year",
+  labs(x = "Seasons",
        y = "Average Utilization Rate",
        color = "City",
        caption = "Utilization Rate Average Change on All Shelters by City") +
   theme_minimal() +
-  scale_y_continuous(labels = scales::percent_format(scale = 100))  
+  scale_y_continuous(labels = scales::percent_format(scale = 100)) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+```{r}
+#| label: fig-shelter-provided
+#| fig-cap: Shelter Capacity During Time Period 2017 to 2020 of CIties
+#| echo: false
+#| message: false
+#| warning: false
+
+# Create individual plots for each city
+toronto_plot <- ggplot(
+  toronto_data %>% slice(seq(1, n(), by = 100)), 
+                         aes(x = occupancy_date, y = total_capacity)) +
+  geom_line(size = 1, color = "blue") +
+  geom_point(size = 2) +
+  labs(title = "Toronto", x = "Year", y = "Capacity") +
+  theme_minimal()
+
+north_york_plot <- ggplot(
+  north_york_data %>% slice(seq(1, n(), by = 100)), 
+  aes(x = occupancy_date, y = total_capacity)) +
+  geom_line(size = 1, color = "green") +
+  geom_point(size = 2) +
+  labs(title = "North York", x = "Year", y = "Capacity") +
+  theme_minimal()
+
+scarborough_plot <- ggplot(
+  scarborough_data %>% slice(seq(1, n(), by = 100)), 
+  aes(x = occupancy_date, y = total_capacity)) +
+  geom_line(size = 1, color = "red") +
+  geom_point(size = 2) +
+  labs(title = "Scarborough", x = "Year", y = "Capacity") +
+  theme_minimal()
+
+etobicoke_plot <- ggplot(
+  etobicoke_data %>% slice(seq(1, n(), by = 100)), 
+  aes(x = occupancy_date, y = total_capacity)) +
+  geom_line(size = 1, color = "orange") +
+  geom_point(size = 2) +
+  labs(title = "Etobicoke", x = "Year", y = "Capacity") +
+  theme_minimal()
+
+# Combine the four plots into a single figure
+combined_plot_cap <- grid.arrange(toronto_plot, north_york_plot, 
+                              scarborough_plot, etobicoke_plot, 
+                              nrow = 2, ncol = 2,
+                              top = "Visualization of Shelter Capacity During Time Period 2017 to 2020")
+
+# Display the combined plot
+invisible(combined_plot_cap)
+
 ```
 
 
 ## Over Capacity Cases
-Back to the original dataset, identify cases where shelter capacity is exceeded (i.e., occupancy > capacity) and understand the frequency and distribution of these events. see @fig-overcapacity, under
+The relashipship between Occupancy and Capcity over this four year (see @fig-occupancy-capacity-relashionship) are revealling cases where more tha expectted people are living in the shelter, as we dicusssued in Data section @sec-data. These cases where capacity is exceeded (when $occupancy > capacity$) are importent when considering improvement shelter system improvement. By further invisted to the dataset, we are ablt to identify cases are actually happens to Families sector in Toronto (see @fig-overcapacity). And all other sector didn't expereince overcorwaaed shelter. Think incidate the quility of shleter servise is good at most case. Families sector are expereiceing overcraodded shelter does not implies the shelter system's fault, it is likely that families with children are assigned to a room with bed/mat that is smaller compared to thier family size. 2 children are able to sleep in one bed, this does not seems like a proalem. For example, a family of five with small children, can elect to be accommodated in a room with four beds, as stated in explanamtion of "CAPACITY" feature in the Portal @Shelter.
+
 ```{r}
 #| label: fig-overcapacity
 #| tbl-cap: Overcrowded Cases by City and Sector
@@ -382,21 +452,18 @@ frequency_table %>%
 
 # Discussion {#sec-discussion}
 
-## First discussion point {#sec-first-point}
+## Shelter servise evaluation
 
-from the study, the Marriage number across Toronto is .....
+Based on the information said in @sec-results, particularly  @fig-shelter-utilization, we can see the selter servise system in the CIty of Toronto are indded good structured. The untillization rate is usually in the 90% - 100% region. Suggesting that what being provided are well-used and supportivie to the homeless community.
 
-## Second discussion point
+## COVID-19 Effect
 
-[My second point]
+Thorugh looking at the plot @fig-shelter-over-time, the ococupanny of shleters are at the highest around WInter 2019 to the begining of 2020. The pendenmic is indeed infecting the homeless population across four cities. Government actual in react to the outbreak of COVID-19, in intend to support homeless population are represnted on @fig-shelter-provided, with higher capacities of living nessecities provided. Thorugh higher capaciticies of existing shelter,s or adding in new shelters. 
 
-## Third discussion point
-[My third point]
 
-## Weaknesses and next steps
+## Weaknesses and next steps {#sec-weakness}
 
-The study is not finalized, more detailed and careful data examination is needed.
-
+COVID-19 is inded empacting on homeless populations, 
 
 \newpage
 
