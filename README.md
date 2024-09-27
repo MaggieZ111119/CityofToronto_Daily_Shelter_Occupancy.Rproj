@@ -3,7 +3,7 @@
 ## Overview
 Toronto faces persistent challenges in assisting individuals who, primarily due to poverty, cannot afford housing and struggle to meet basic living. In response to the issue, City of Toronto operates a network of shelters catering to men, women, youth, and families, making it essential to balance the availability of these services with demand. Monitoring shelter occupancy trends with capacity is crucial for identifying resource gaps and developing effective policies to address the needs of homeless populations.
 
-This [paper] (https://github.com/MaggieZ111119/CityofToronto_Daily_Shelter_Occupancy.Rproj/blob/main/paper/paper.pdf) studies the shelter occupancy data from 2017 to 2020 across four cities: Toronto, Etobicoke, Scarborough, and North York.
+This `paper` (https://github.com/MaggieZ111119/CityofToronto_Daily_Shelter_Occupancy.Rproj/blob/main/paper/paper.pdf) studies the shelter occupancy data from 2017 to 2020 across four cities: Toronto, Etobicoke, Scarborough, and North York.
 
 
 ## Data Access
