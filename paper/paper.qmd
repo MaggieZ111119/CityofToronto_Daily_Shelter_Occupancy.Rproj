@@ -33,13 +33,15 @@ shelter_data <- read_csv(here::here("~/CityofToronto_Daily_Shelter_Occupancy.Rpr
 
 # Introduction
 
-Homelessness is a persistent and complex issue in many areas in Canada(@gaetz2010struggle), and Toronto is no exception. As one of Canada’s largest cities, Toronto faces significant challenges in helping homeless people, who are unable to spend on housing largely due to poverty, to meet the necessities of living(@jadidzadeh2018patterns). The city operates a range of shelters that serve various groups, including men, women, youth, and families. The balance between availability and the demand for these services is crucial for both the well-being of individuals experiencing homelessness and the government's efforts to reduce homelessness population. Understanding how shelter occupancy changes over time is essential for identifying gaps in resources and shaping effective policy responses.
 
-This paper focuses on analyzing shelter occupancy data from 2017 to 2020 in City of Toronto. The data which offers a detailed look at the city’s shelter during this time of period is provided on @OpenDataToronto portal. By examining trends in occupancy through the data, we aim to assess how well Toronto's shelters met the demand for space and where shortages may have occurred. By focusing on specific sectors of the shelter system, pinpoint which groups may have been disproportionately affected by resource limitations. 
+Homelessness remains a persistent issue across Canada, including in Toronto(@gaetz2010struggle). s one of the country’s largest cities, Toronto faces ongoing challenges in assisting individuals who, primarily due to poverty, cannot afford housing and struggle to meet basic needs(@jadidzadeh2018patterns). The City of Toronto operates a network of shelters catering to men, women, youth, and families, making it essential to balance the availability of these services with demand. Monitoring shelter occupancy trends with capacity is crucial for identifying resource gaps and developing effective policies to address the needs of homeless populations.
 
-FINDING! This study addresses a clear gap in the current literature by providing an up-to-date analysis of Toronto's shelter capacity and usage during a time of unprecedented public health and social challenges. ___ NOTICE!!
+This paper analyzes shelter occupancy data from 2017 to 2020 in the City of Toronto, sourced from the Open Data Toronto portal (@OepnDataToronto). By examining occupancy trends during this period, particularly during the COVID-19 pandemic, we aim to evaluate how effectively the city's shelters met the increased demand. Our focus on specific sectors within the shelter system will help determine which groups were disproportionately affected and shed light on the system's adaptability in response to the crisis, particularly in addressing issues of overcrowding in family shelters.
 
-The remiander of this paper are in presented in sections: @sec-data : Data, @sec-results :Results, and @sec-discussion :Discussion. The data section introduce the dataset used for analysis, expalinin its source and context that shaped its collection.This section thoroughly summarizes the data using visualizations created with `ggplot2` (@R-ggplot2) and tables produced with `knitr` (@R-knitr). Key variables chosen for the analysis, along with the reasoning behind their selection, are explained. The results section presents the findings drawn from the data, highlighting patterns in shelter occupancy and compare to it's availability. Following by the discussion section, which explores the implications of these findings, particularly in relation to resource allocation and policy development, offering insights into how Toronto's shelter system responded to increasing demand.
+
+By studying the shelter occupancy data from 2017 to 2020 across four cities, key findings emerged. There was an increase in shelter occupancy from late 2019 to early 2020, which coincided with the onset of the COVID-19 pandemic, particularly in Scarborough, which was observed to have higher than usual capacities of sheltering service during that period. Despite the rise in shelter use, the utilization rates remained high, indicating that the shelters were effectively meeting demand without being overburdened. The government's timely increase in shelter capacity during the pandemic was especially evident. Over Capacity sheltering experience exists, in Toronto's shelters for families, but it likely resulted from flexible accommodation arrangements rather than systemic flaws. Overall, the shelter system demonstrated well adaptability and support for homeless populations during this period.
+
+The remainder of this paper is presented in sections: @sec-data :Data, @sec-results :Results, @sec-discussion :Discussion, and @sec-weakness :Weaknesses and Next Steps. The data section introduces the dataset used for analysis, explaining its source and the context that shaped its collection. This section thoroughly summarizes the data using visualizations created with `ggplot2` (@R-ggplot2) and tables produced with `knitr` (@R-knitr), also with `gridExtra` (@gridExtra) to help formatting. Key variables chosen for the analysis, along with the reasoning behind their selection, are explained. The results section presents the findings drawn from the data, highlighting patterns in shelter occupancy and compare to its availability. Followed by the discussion section, which explores the implications of these findings, particularly in relation to resource allocation and policy development, offering insights into how Toronto's shelter system responded to increasing demand.
 
 
 # Data {#sec-data}
@@ -236,7 +238,7 @@ ggplot(shelter_data, aes(x = total_capacity, y = total_occupancy, color = sector
 Through grpahfical study of the datset, some usful information are found and the result will be dicussed in this section. 
 
 ## Shelter Occupancy Trend over Time
-The figure @fig-shelter-over-time as dipict the trend of homless poeple occupiying shelters in each city. A high in occupancy are notice in all four city around the time between late 2019 to early 2020. Especially, there is a obviouse rising trend in Scarborough. Combined with the information on the "About Daily Shelter Occupancy" section in the data website @Shelter, it rise may be subjectted to the ourbreak of COVID_19. The occpany number going significantly decrease from mid 2020, across all four cities also suggest this finding. 
+The figure @fig-shelter-over-time depicts the trend of homeless people occupying shelters in each city over time. A noticeable peak in occupancy is observed across all four cities between late 2019 and early 2020. Especially, there is an rising trend in Scarborough. This rise coincides with the outbreak of COVID-19, as noted in the "About Daily Shelter Occupancy" section in the data website @ShelterThe. significant decrease in occupancy from mid-2020 across all cities further supports this correlation, suggesting the pandemic had a direct impact on shelter use.
 ```{r}
 #| label: fig-shelter-over-time
 #| fig-cap: Visualization of Shelter Occupancy During Time Period 2017 to 2020
@@ -463,13 +465,9 @@ Thorugh looking at the plot @fig-shelter-over-time, the ococupanny of shleters a
 
 ## Weaknesses and next steps {#sec-weakness}
 
-COVID-19 is inded empacting on homeless populations, 
+COVID-19 is inded empacting on homeless populations, and the effor of mainting thier living needs is a continuse effort even 5 years after the outbreak. This data contains evidence for govemetn support during the pendemic, but is not inclusive enought to evluated on their performance on shelter servises. This defeinlty reqire more rigours research. And it's also not enought to say about what is the govement' support now, since this data only untill 2020. ALso, the increase untillization rate during covid outbreak could be the case that more people are facing more severe peoeblems so that not even make it to the shelter. 
+Understanidng the well-velopneness and imparotance of support networks among people experiencing homelessness is sessential. A more cirtical proalblem comes along it how should the supporte being delievered. A good way to to support while ensuring not to disrupt them, for instance by avoiding practices that displace or isolate people from their communities such as moving people to shelters located far from their usual supports @boucher2022they. This is defienlt a long journey to go.
 
-\newpage
-
-\appendix
-
-# Appendix {-}
 
 
 # References
