@@ -87,16 +87,16 @@ As shown in @fig-shelter-full-table, the data includes observations from four ci
 #| message: false
 
 # Count the number of observations by city and sector
-city_sector_breakdown <- shelter_data %>%
-  group_by(shelter_city, sector) %>%
-  count() %>%
+city_sector_breakdown <- shelter_data |>
+  group_by(shelter_city, sector) |>
+  count() |>
   spread(key = sector, value = n, fill = 0)
 
 # Check if the total is being calculated correctly
 city_sector_breakdown$Sum <- rowSums(city_sector_breakdown[,2:6], na.rm = TRUE)
 
 # Display the table with correct formatting
-city_sector_breakdown %>%
+city_sector_breakdown |>
   kable(caption = "Number of Observations by City and Sector")
 
 
@@ -113,18 +113,18 @@ The following table @fig-shelter-diff-city summarizes the average, maximum, and 
 # If I want to calculate the total occupancy of that date in that city, I need to add all sector information together. Then, we will see the average, max, mix of occupancy. 
 # Same idea to capacity.
 
-toronto_data <- shelter_data %>% 
-  filter(shelter_city == "Toronto") %>% 
-  group_by(occupancy_date) %>%
+toronto_data <- shelter_data |> 
+  filter(shelter_city == "Toronto") |> 
+  group_by(occupancy_date) |>
   summarise(
     total_occupancy = sum(total_occupancy, na.rm = TRUE),
     total_capacity = sum(total_capacity, na.rm = TRUE),
     .groups = 'drop'
   )
 
-north_york_data <- shelter_data %>% 
-  filter(shelter_city == "North York") %>%
-  group_by(occupancy_date) %>%
+north_york_data <- shelter_data |> 
+  filter(shelter_city == "North York") |>
+  group_by(occupancy_date) |>
   summarise(
     total_occupancy = sum(total_occupancy, na.rm = TRUE),
     total_capacity = sum(total_capacity, na.rm = TRUE),
@@ -132,18 +132,18 @@ north_york_data <- shelter_data %>%
   )
   
 
-scarborough_data <- shelter_data %>% 
-  filter(shelter_city == "Scarborough")%>%
-  group_by(occupancy_date) %>%
+scarborough_data <- shelter_data |> 
+  filter(shelter_city == "Scarborough")|>
+  group_by(occupancy_date) |>
   summarise(
     total_occupancy = sum(total_occupancy, na.rm = TRUE),
     total_capacity = sum(total_capacity, na.rm = TRUE),
     .groups = 'drop'
   )
 
-etobicoke_data <- shelter_data %>% 
-  filter(shelter_city == "Etobicoke") %>%
-  group_by(occupancy_date) %>%
+etobicoke_data <- shelter_data |> 
+  filter(shelter_city == "Etobicoke") |>
+  group_by(occupancy_date) |>
   summarise(
     total_occupancy = sum(total_occupancy, na.rm = TRUE),
     total_capacity = sum(total_capacity, na.rm = TRUE),
@@ -151,7 +151,7 @@ etobicoke_data <- shelter_data %>%
   )
 
 # Summary statistics for each city
-toronto_summary <- toronto_data %>%
+toronto_summary <- toronto_data |>
   summarise(
     avg_occupancy = mean(total_occupancy, na.rm = TRUE),
     max_occupancy = max(total_occupancy, na.rm = TRUE),
@@ -162,7 +162,7 @@ toronto_summary <- toronto_data %>%
   ) 
  
 
-north_york_summary <- north_york_data %>%
+north_york_summary <- north_york_data |>
   summarise(
     avg_occupancy = mean(total_occupancy, na.rm = TRUE),
     max_occupancy = max(total_occupancy, na.rm = TRUE),
@@ -173,7 +173,7 @@ north_york_summary <- north_york_data %>%
   )
 
 
-scarborough_summary <- scarborough_data %>%
+scarborough_summary <- scarborough_data |>
   summarise(
     avg_occupancy = mean(total_occupancy, na.rm = TRUE),
     max_occupancy = max(total_occupancy, na.rm = TRUE),
@@ -184,7 +184,7 @@ scarborough_summary <- scarborough_data %>%
   )
 
 
-etobicoke_summary <- etobicoke_data %>%
+etobicoke_summary <- etobicoke_data |>
   summarise(
     avg_occupancy = mean(total_occupancy, na.rm = TRUE),
     max_occupancy = max(total_occupancy, na.rm = TRUE),
@@ -202,7 +202,7 @@ combined_summary <- bind_rows(toronto_summary,
                           scarborough_summary,
                           etobicoke_summary)
 combined_summary$city <- city
-combined_summary <- combined_summary %>%
+combined_summary <- combined_summary |>
   select(city, everything()) 
 
 kable(combined_summary, 
@@ -252,28 +252,28 @@ The figure @fig-shelter-over-time depicts the trend of homeless people occupying
 
 # Assuming you have a data frame 'shelter_data' with total occupancy for each city
 # Create individual plots for each city
-toronto_plot <- ggplot(toronto_data %>% slice(seq(1, n(), by = 50)), aes(x = occupancy_date, y = total_occupancy)) +
+toronto_plot <- ggplot(toronto_data |> slice(seq(1, n(), by = 50)), aes(x = occupancy_date, y = total_occupancy)) +
   geom_line(color = "blue") +
   labs(title = "Toronto Occupancy Trends",
        x = "Date",
        y = "Total Occupancy") +
   theme_minimal()
 
-north_york_plot <- ggplot(north_york_data%>% slice(seq(1, n(), by = 50)), aes(x = occupancy_date, y = total_occupancy)) +
+north_york_plot <- ggplot(north_york_data|> slice(seq(1, n(), by = 50)), aes(x = occupancy_date, y = total_occupancy)) +
   geom_line(color = "green") +
   labs(title = "North York Occupancy Trends",
        x = "Date",
        y = "Total Occupancy") +
   theme_minimal()
 
-scarborough_plot <- ggplot(scarborough_data%>% slice(seq(1, n(), by = 50)), aes(x = occupancy_date, y = total_occupancy)) +
+scarborough_plot <- ggplot(scarborough_data|> slice(seq(1, n(), by = 50)), aes(x = occupancy_date, y = total_occupancy)) +
   geom_line(color = "red") +
   labs(title = "Scarborough Occupancy Trends",
        x = "Date",
        y = "Total Occupancy") +
   theme_minimal()
 
-etobicoke_plot <- ggplot(etobicoke_data%>% slice(seq(1, n(), by = 50)), aes(x = occupancy_date, y = total_occupancy)) +
+etobicoke_plot <- ggplot(etobicoke_data|> slice(seq(1, n(), by = 50)), aes(x = occupancy_date, y = total_occupancy)) +
   geom_line(color = "orange") +
   labs(title = "Etobicoke Occupancy Trends",
        x = "Date",
@@ -304,28 +304,28 @@ As shown in @fig-shelter-utilization, Toronto almost consistently has the lowest
 #| warning: false
 
 # Calculate utilization rate by city
-toronto_data <- toronto_data %>%
+toronto_data <- toronto_data |>
   mutate(utilization_rate = total_occupancy / total_capacity)
 
-north_york_data <- north_york_data %>%
+north_york_data <- north_york_data |>
   mutate(utilization_rate = total_occupancy / total_capacity)
 
-scarborough_data <- scarborough_data %>%
+scarborough_data <- scarborough_data |>
   mutate(utilization_rate = total_occupancy / total_capacity)
 
-etobicoke_data <- etobicoke_data %>%
+etobicoke_data <- etobicoke_data |>
   mutate(utilization_rate = total_occupancy / total_capacity)
 
 # Combine all city datasets
 combined_data <- bind_rows(
-  toronto_data %>% mutate(shelter_city = "Toronto"),
-  north_york_data %>% mutate(shelter_city = "North York"),
-  scarborough_data %>% mutate(shelter_city = "Scarborough"),
-  etobicoke_data %>% mutate(shelter_city = "Etobicoke")
+  toronto_data |> mutate(shelter_city = "Toronto"),
+  north_york_data |> mutate(shelter_city = "North York"),
+  scarborough_data |> mutate(shelter_city = "Scarborough"),
+  etobicoke_data |> mutate(shelter_city = "Etobicoke")
 )
 
 # Extract year from occupancy_date
-combined_data <- combined_data %>%
+combined_data <- combined_data |>
   mutate(year = year(occupancy_date),
          month = month(occupancy_date),
          season = case_when(
@@ -337,7 +337,7 @@ combined_data <- combined_data %>%
 
 
 # Have data into seasons
-combined_data <- combined_data %>%
+combined_data <- combined_data |>
   mutate(season_year = factor(paste(season, year), 
                                levels = c("Winter 2017", "Spring 2017", "Summer 2017", "Fall 2017",
                                           "Winter 2018", "Spring 2018", "Summer 2018", "Fall 2018",
@@ -345,8 +345,8 @@ combined_data <- combined_data %>%
                                           "Winter 2020", "Spring 2020", "Summer 2020", "Fall 2020")))
 
 # Calculate average utilization rate
-annual_utilization <- combined_data %>%
-  group_by(season_year, shelter_city) %>%
+annual_utilization <- combined_data |>
+  group_by(season_year, shelter_city) |>
   summarise(avg_utilization_rate = mean(utilization_rate, na.rm = TRUE), .groups = 'drop')
 
 
@@ -371,7 +371,7 @@ ggplot(annual_utilization, aes(x = season_year, y = avg_utilization_rate, color 
 
 # Create individual plots for each city
 toronto_plot <- ggplot(
-  toronto_data %>% slice(seq(1, n(), by = 100)), 
+  toronto_data |> slice(seq(1, n(), by = 100)), 
                          aes(x = occupancy_date, y = total_capacity)) +
   geom_line(size = 1, color = "blue") +
   geom_point(size = 2) +
@@ -379,7 +379,7 @@ toronto_plot <- ggplot(
   theme_minimal()
 
 north_york_plot <- ggplot(
-  north_york_data %>% slice(seq(1, n(), by = 100)), 
+  north_york_data |> slice(seq(1, n(), by = 100)), 
   aes(x = occupancy_date, y = total_capacity)) +
   geom_line(size = 1, color = "green") +
   geom_point(size = 2) +
@@ -387,7 +387,7 @@ north_york_plot <- ggplot(
   theme_minimal()
 
 scarborough_plot <- ggplot(
-  scarborough_data %>% slice(seq(1, n(), by = 100)), 
+  scarborough_data |> slice(seq(1, n(), by = 100)), 
   aes(x = occupancy_date, y = total_capacity)) +
   geom_line(size = 1, color = "red") +
   geom_point(size = 2) +
@@ -395,7 +395,7 @@ scarborough_plot <- ggplot(
   theme_minimal()
 
 etobicoke_plot <- ggplot(
-  etobicoke_data %>% slice(seq(1, n(), by = 100)), 
+  etobicoke_data |> slice(seq(1, n(), by = 100)), 
   aes(x = occupancy_date, y = total_capacity)) +
   geom_line(size = 1, color = "orange") +
   geom_point(size = 2) +
@@ -424,14 +424,14 @@ The relationship between occupancy and capacity over the four years (@fig-relash
 #| message: false
 
 # Filter for overcrowded data
-overcrowded_data <- shelter_data %>%
+overcrowded_data <- shelter_data |>
   filter(total_occupancy > total_capacity)
 
 # Create a frequency table including all cities and sectors
-frequency_table <- overcrowded_data %>%
-  group_by(shelter_city, sector) %>%
-  summarise(count = n(), .groups = 'drop') %>%
-  complete(shelter_city, sector, fill = list(count = 0)) %>%
+frequency_table <- overcrowded_data |>
+  group_by(shelter_city, sector) |>
+  summarise(count = n(), .groups = 'drop') |>
+  complete(shelter_city, sector, fill = list(count = 0)) |>
   pivot_wider(names_from = sector, values_from = count)
 
 # Create a complete dataset of all combinations of cities and sectors
@@ -441,15 +441,15 @@ all_combinations <- expand.grid(
 )
 
 # Create a frequency table including all cities and sectors
-frequency_table <- overcrowded_data %>%
-  group_by(shelter_city, sector) %>%
-  summarise(count = n(), .groups = 'drop') %>%
-  right_join(all_combinations, by = c("shelter_city", "sector")) %>%
-  replace_na(list(count = 0)) %>%
+frequency_table <- overcrowded_data |>
+  group_by(shelter_city, sector) |>
+  summarise(count = n(), .groups = 'drop') |>
+  right_join(all_combinations, by = c("shelter_city", "sector")) |>
+  replace_na(list(count = 0)) |>
   pivot_wider(names_from = sector, values_from = count, values_fill = 0)
 
 # View the frequency table with knitr
-frequency_table %>%
+frequency_table |>
   kable(caption = "Overcrowded Cases by City and Sector")
 
 ```
